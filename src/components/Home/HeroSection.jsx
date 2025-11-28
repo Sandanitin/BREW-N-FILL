@@ -8,11 +8,15 @@ const HeroSection = () => {
     });
 
     return (
-        <section className="relative h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black overflow-hidden">
-            {/* Animated Background Elements */}
-            <div className="absolute inset-0">
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-yellow/20 rounded-full filter blur-3xl animate-pulse-slow"></div>
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-brand-yellow/10 rounded-full filter blur-3xl animate-pulse-slow delay-1000"></div>
+        <section className="relative h-screen flex items-center justify-center overflow-hidden">
+            {/* Background Image */}
+            <div className="absolute inset-0 z-0">
+                <img
+                    src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1600&q=80"
+                    alt="Coffee Background"
+                    className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black/60"></div>
             </div>
 
             {/* Content */}

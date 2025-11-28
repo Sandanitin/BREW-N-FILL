@@ -7,7 +7,7 @@ const ProductShowcase = () => {
             id: 1,
             name: 'Single Origin Coffee',
             description: 'Premium beans from Ethiopian highlands',
-            image: '/images/placeholder-single-origin.jpg',
+            image: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=800&q=80',
             textColor: 'text-white',
             bgColor: 'from-gray-900 to-gray-800',
         },
@@ -15,7 +15,7 @@ const ProductShowcase = () => {
             id: 2,
             name: 'Coffee Capsules',
             description: 'Espresso perfection in every pod',
-            image: '/images/placeholder-capsules.jpg',
+            image: 'https://images.unsplash.com/photo-1621996659490-3275b4d0d951?w=800&q=80',
             textColor: 'text-black',
             bgColor: 'from-brand-yellow-light to-brand-yellow',
         },
@@ -23,7 +23,7 @@ const ProductShowcase = () => {
             id: 3,
             name: 'Brewing Equipment',
             description: 'Professional-grade coffee makers',
-            image: '/images/placeholder-equipment.jpg',
+            image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80',
             textColor: 'text-white',
             bgColor: 'from-black to-gray-900',
         },
@@ -31,9 +31,9 @@ const ProductShowcase = () => {
             id: 4,
             name: 'Merchandise',
             description: 'Premium coffee accessories',
-            image: '/images/placeholder-merchandise.jpg',
-            textColor: 'text-black',
-            bgColor: 'from-gray-100 to-white',
+            image: 'https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=800&q=80',
+            textColor: 'text-white',
+            bgColor: 'from-gray-900 to-black',
         },
     ];
 
@@ -65,9 +65,14 @@ const ProductCard = ({ product, index }) => {
             transition={{ duration: 0.6, delay: index * 0.1 }}
             className={`relative h-[500px] rounded-3xl overflow-hidden group cursor-pointer bg-gradient-to-br ${product.bgColor}`}
         >
-            {/* Product Image Placeholder - Using gradient */}
-            <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-64 h-64 bg-white/10 rounded-full filter blur-2xl group-hover:scale-110 transition-transform duration-700"></div>
+            {/* Product Image */}
+            <div className="absolute inset-0">
+                <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-300"></div>
             </div>
 
             {/* Content */}
@@ -77,7 +82,7 @@ const ProductCard = ({ product, index }) => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={inView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: 0.6, delay: index * 0.1 + 0.2 }}
-                        className={`text-4xl font-bold mb-3 ${product.textColor}`}
+                        className={`text-4xl font-bold mb-3 text-white`}
                     >
                         {product.name}
                     </motion.h3>
@@ -85,7 +90,7 @@ const ProductCard = ({ product, index }) => {
                         initial={{ opacity: 0 }}
                         animate={inView ? { opacity: 1 } : {}}
                         transition={{ duration: 0.6, delay: index * 0.1 + 0.3 }}
-                        className={`text-lg ${product.textColor}/80`}
+                        className={`text-lg text-white/90`}
                     >
                         {product.description}
                     </motion.p>
@@ -93,26 +98,17 @@ const ProductCard = ({ product, index }) => {
 
                 <div className="flex gap-4">
                     <button
-                        className={`${product.textColor === 'text-white'
-                                ? 'bg-white text-black hover:bg-brand-yellow'
-                                : 'bg-black text-white hover:bg-gray-800'
-                            } px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105`}
+                        className={`bg-white text-black hover:bg-brand-yellow px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105`}
                     >
                         Buy
                     </button>
                     <button
-                        className={`${product.textColor === 'text-white'
-                                ? 'border-white text-white hover:bg-white hover:text-black'
-                                : 'border-black text-black hover:bg-black hover:text-white'
-                            } border-2 px-6 py-3 rounded-full font-semibold transition-all duration-300`}
+                        className={`border-white text-white hover:bg-white hover:text-black border-2 px-6 py-3 rounded-full font-semibold transition-all duration-300`}
                     >
                         Learn More
                     </button>
                 </div>
             </div>
-
-            {/* Hover Effect Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         </motion.div>
     );
 };

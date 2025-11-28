@@ -1,11 +1,11 @@
 // Product images
 export const productImages = {
-    ethiopian: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=800&q=80',
+    ethiopian: 'https://images.unsplash.com/photo-1611162458324-a92ea2209098?w=800&q=80',
     espresso: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=800&q=80',
     colombian: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=800&q=80',
     vanilla: 'https://images.unsplash.com/photo-1559525839-b184a4d698c7?w=800&q=80',
-    italian: 'https://images.unsplash.com/photo-1511537632536-b7a475d52dac?w=800&q=80',
-    decaf: 'https://images.unsplash.com/photo-1550681566-664463a4001f?w=800&q=80',
+    italian: 'https://images.unsplash.com/photo-1550681566-664463a4001f?w=800&q=80',
+    decaf: 'https://images.unsplash.com/photo-1525610553991-2bede1a236e2?w=800&q=80',
     coldbrew: 'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=800&q=80',
     hazelnut: 'https://images.unsplash.com/photo-1610889556528-9a770e32642f?w=800&q=80',
     breakfast: 'https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=800&q=80',
