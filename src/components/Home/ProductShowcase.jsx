@@ -38,10 +38,10 @@ const ProductShowcase = () => {
     ];
 
     return (
-        <section className="py-20 bg-white">
+        <section className="py-12 md:py-20 bg-white">
             <div className="container-custom">
-                {/* Grid Layout - Apple Style */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Grid Layout - Responsive */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                     {products.map((product, index) => (
                         <ProductCard key={product.id} product={product} index={index} />
                     ))}
@@ -63,7 +63,7 @@ const ProductCard = ({ product, index }) => {
             initial={{ opacity: 0, y: 50 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: index * 0.1 }}
-            className={`relative h-[500px] rounded-3xl overflow-hidden group cursor-pointer bg-gradient-to-br ${product.bgColor}`}
+            className={`relative h-[400px] md:h-[500px] rounded-2xl md:rounded-3xl overflow-hidden group cursor-pointer bg-gradient-to-br ${product.bgColor}`}
         >
             {/* Product Image */}
             <div className="absolute inset-0">
@@ -75,14 +75,14 @@ const ProductCard = ({ product, index }) => {
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-300"></div>
             </div>
 
-            {/* Content */}
-            <div className="relative z-10 h-full flex flex-col justify-between p-8">
+            {/* Content - Mobile optimized */}
+            <div className="relative z-10 h-full flex flex-col justify-between p-5 md:p-8">
                 <div>
                     <motion.h3
                         initial={{ opacity: 0, y: 20 }}
                         animate={inView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: 0.6, delay: index * 0.1 + 0.2 }}
-                        className={`text-4xl font-bold mb-3 text-white`}
+                        className="text-2xl md:text-4xl font-bold mb-2 md:mb-3 text-white"
                     >
                         {product.name}
                     </motion.h3>
@@ -90,20 +90,21 @@ const ProductCard = ({ product, index }) => {
                         initial={{ opacity: 0 }}
                         animate={inView ? { opacity: 1 } : {}}
                         transition={{ duration: 0.6, delay: index * 0.1 + 0.3 }}
-                        className={`text-lg text-white/90`}
+                        className="text-base md:text-lg text-white/90"
                     >
                         {product.description}
                     </motion.p>
                 </div>
 
-                <div className="flex gap-4">
+                {/* Buttons - Responsive */}
+                <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
                     <button
-                        className={`bg-white text-black hover:bg-brand-yellow px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105`}
+                        className="bg-white text-black hover:bg-brand-yellow px-5 md:px-6 py-2.5 md:py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 text-sm md:text-base"
                     >
-                        Buy
+                        Buy Now
                     </button>
                     <button
-                        className={`border-white text-white hover:bg-white hover:text-black border-2 px-6 py-3 rounded-full font-semibold transition-all duration-300`}
+                        className="border-white text-white hover:bg-white hover:text-black border-2 px-5 md:px-6 py-2.5 md:py-3 rounded-full font-semibold transition-all duration-300 text-sm md:text-base"
                     >
                         Learn More
                     </button>

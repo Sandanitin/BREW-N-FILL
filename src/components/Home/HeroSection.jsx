@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
     const [ref, inView] = useInView({
@@ -31,18 +32,18 @@ const HeroSection = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={inView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.8, delay: 0.2 }}
-                    className="text-6xl md:text-8xl font-bold mb-6"
+                    className="text-4xl sm:text-6xl md:text-8xl font-bold mb-4 md:mb-6"
                 >
                     <span className="text-white">Brew Your</span>
                     <br />
-                    <span className="gradient-text text-7xl md:text-9xl">Perfect Cup</span>
+                    <span className="gradient-text text-5xl sm:text-7xl md:text-9xl">Perfect Cup</span>
                 </motion.h1>
 
                 <motion.p
                     initial={{ opacity: 0 }}
                     animate={inView ? { opacity: 1 } : {}}
                     transition={{ duration: 0.8, delay: 0.4 }}
-                    className="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto"
+                    className="text-lg md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto"
                 >
                     Discover premium coffee from around the world, roasted to perfection for every moment
                 </motion.p>
@@ -53,12 +54,12 @@ const HeroSection = () => {
                     transition={{ duration: 0.5, delay: 0.6 }}
                     className="flex flex-col sm:flex-row gap-4 justify-center items-center"
                 >
-                    <button className="btn-primary text-lg px-8 py-4">
+                    <Link to="/roasted-coffee" className="btn-primary text-lg px-8 py-3 md:py-4 w-full sm:w-auto inline-block">
                         Shop Now
-                    </button>
-                    <button className="btn-outline border-white text-white hover:bg-white hover:text-black text-lg px-8 py-4">
+                    </Link>
+                    <Link to="/bestsellers" className="btn-outline border-white text-white hover:bg-white hover:text-black text-lg px-8 py-3 md:py-4 w-full sm:w-auto inline-block">
                         Explore Collections
-                    </button>
+                    </Link>
                 </motion.div>
 
                 {/* Scroll Indicator */}
@@ -66,7 +67,7 @@ const HeroSection = () => {
                     initial={{ opacity: 0 }}
                     animate={inView ? { opacity: 1 } : {}}
                     transition={{ duration: 0.8, delay: 1 }}
-                    className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
+                    className="absolute bottom-10 left-1/2 transform -translate-x-1/2 hidden md:block"
                 >
                     <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
                         <motion.div

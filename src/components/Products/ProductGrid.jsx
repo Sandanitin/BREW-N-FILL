@@ -32,46 +32,48 @@ const ProductGrid = () => {
     const products = getFilteredProducts();
 
     return (
-        <section className="py-16 bg-gray-50">
+        <section className="py-12 md:py-16 bg-gray-50">
             <div className="container-custom">
-                {/* Header */}
-                <div className="mb-8">
-                    <h2 className="text-4xl font-bold mb-2">Our Collection</h2>
-                    <p className="text-gray-600">Discover premium coffee roasted to perfection</p>
+                {/* Header - Mobile optimized */}
+                <div className="mb-6 md:mb-8">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-2">Our Collection</h2>
+                    <p className="text-sm md:text-base text-gray-600">Discover premium coffee roasted to perfection</p>
                 </div>
 
-                {/* Category Tabs */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                    {categories.map((cat) => (
-                        <button
-                            key={cat}
-                            onClick={() => setCategory(cat)}
-                            className={`px-4 py-2 rounded-full transition-all ${category === cat
+                {/* Category Tabs - Scrollable on mobile */}
+                <div className="overflow-x-auto pb-2 mb-6 -mx-4 px-4">
+                    <div className="flex gap-2 min-w-max">
+                        {categories.map((cat) => (
+                            <button
+                                key={cat}
+                                onClick={() => setCategory(cat)}
+                                className={`px-4 py-2 rounded-full transition-all whitespace-nowrap text-sm md:text-base ${category === cat
                                     ? 'bg-black text-white'
                                     : 'bg-white text-gray-700 hover:bg-gray-100'
-                                }`}
-                        >
-                            {cat}
-                        </button>
-                    ))}
+                                    }`}
+                            >
+                                {cat}
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
-                {/* Filters & Sort */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                {/* Filters & Sort - Mobile stacked */}
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 md:gap-4 mb-6 md:mb-8">
                     <button
                         onClick={() => setShowFilters(!showFilters)}
-                        className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:border-black transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:border-black transition-colors text-sm md:text-base"
                     >
                         <FiFilter />
                         <span>Filters</span>
                     </button>
 
-                    <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-600">Sort by:</span>
+                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                        <span className="text-xs md:text-sm text-gray-600 whitespace-nowrap">Sort by:</span>
                         <select
                             value={sortBy}
                             onChange={(e) => setSortBy(e.target.value)}
-                            className="px-4 py-2 border border-gray-300 rounded-lg hover:border-black transition-colors cursor-pointer focus:ring-2 focus:ring-brand-yellow focus:border-transparent"
+                            className="flex-1 sm:flex-none px-3 md:px-4 py-2 border border-gray-300 rounded-lg hover:border-black transition-colors cursor-pointer focus:ring-2 focus:ring-brand-yellow focus:border-transparent text-sm md:text-base"
                         >
                             <option value="featured">Featured</option>
                             <option value="price-low">Price: Low to High</option>
@@ -82,8 +84,8 @@ const ProductGrid = () => {
                     </div>
                 </div>
 
-                {/* Product Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {/* Product Grid - Responsive columns */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                     {products.map((product, index) => (
                         <ProductCard key={product.id} product={product} index={index} />
                     ))}
@@ -91,7 +93,7 @@ const ProductGrid = () => {
 
                 {products.length === 0 && (
                     <div className="text-center py-12">
-                        <p className="text-gray-500 text-lg">No products found in this category</p>
+                        <p className="text-gray-500 text-base md:text-lg">No products found in this category</p>
                     </div>
                 )}
             </div>
