@@ -137,202 +137,251 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
                 exit={{ opacity: 0 }}
                 className="fixed inset-0 z-50 flex items-center justify-center px-4"
             >
-                {/* Backdrop */}
+                {/* Backdrop with Apple-style blur */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                    className="absolute inset-0 bg-black/40 backdrop-blur-apple"
                     onClick={handleClose}
                 />
 
-                {/* Modal */}
+                {/* Modal - Apple-inspired design */}
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                    initial={{ opacity: 0, scale: 0.96, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                    className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+                    exit={{ opacity: 0, scale: 0.96, y: 20 }}
+                    transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                    className="relative bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-hidden"
                 >
                     {/* Close Button */}
                     <button
                         onClick={handleClose}
-                        className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors z-10"
+                        className="absolute top-5 right-5 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100/80 hover:bg-gray-200/80 text-gray-500 hover:text-gray-700 transition-all duration-200"
+                        aria-label="Close"
                     >
-                        <FiX className="text-2xl" />
+                        <FiX className="text-xl" />
                     </button>
 
                     {/* Content */}
-                    <div className="p-8">
-                        <h2 className="text-3xl font-bold mb-2">Create Account</h2>
-                        <p className="text-gray-600 mb-6">Join the BREW-N-FILL community</p>
+                    <div className="p-10 overflow-y-auto max-h-[90vh]">
+                        {/* Header */}
+                        <div className="text-center mb-8">
+                            <h2 className="text-4xl font-semibold mb-3 tracking-tight">
+                                Join the <span className="gradient-text">Community</span>
+                            </h2>
+                            <p className="text-gray-500 text-base">
+                                Create your account and start earning rewards
+                            </p>
+                        </div>
 
                         <form onSubmit={handleSubmit} className="space-y-4">
                             {/* Name Field */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-sm font-medium text-gray-800 mb-2">
                                     Full Name
                                 </label>
                                 <div className="relative">
-                                    <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                                    <FiUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg" />
                                     <input
                                         type="text"
                                         name="name"
                                         value={formData.name}
                                         onChange={handleChange}
-                                        className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-yellow ${errors.name ? 'border-red-500' : 'border-gray-300'
-                                            }`}
-                                        placeholder="Enter your full name"
+                                        className={`w-full pl-12 pr-4 py-4 border ${errors.name ? 'border-red-400' : 'border-gray-200'} rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-yellow/50 focus:border-brand-yellow transition-all duration-200 bg-gray-50/50 text-base`}
+                                        placeholder="John Doe"
                                     />
                                 </div>
                                 {errors.name && (
-                                    <p className="text-red-500 text-xs mt-1">{errors.name}</p>
+                                    <motion.p
+                                        initial={{ opacity: 0, y: -5 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="text-red-500 text-xs mt-2 ml-1"
+                                    >
+                                        {errors.name}
+                                    </motion.p>
                                 )}
                             </div>
 
                             {/* Email Field */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Email Address
+                                <label className="block text-sm font-medium text-gray-800 mb-2">
+                                    Email
                                 </label>
                                 <div className="relative">
-                                    <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                                    <FiMail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg" />
                                     <input
                                         type="email"
                                         name="email"
                                         value={formData.email}
                                         onChange={handleChange}
-                                        className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-yellow ${errors.email ? 'border-red-500' : 'border-gray-300'
-                                            }`}
-                                        placeholder="Enter your email"
+                                        className={`w-full pl-12 pr-4 py-4 border ${errors.email ? 'border-red-400' : 'border-gray-200'} rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-yellow/50 focus:border-brand-yellow transition-all duration-200 bg-gray-50/50 text-base`}
+                                        placeholder="you@example.com"
                                     />
                                 </div>
                                 {errors.email && (
-                                    <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                                    <motion.p
+                                        initial={{ opacity: 0, y: -5 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="text-red-500 text-xs mt-2 ml-1"
+                                    >
+                                        {errors.email}
+                                    </motion.p>
                                 )}
                             </div>
 
                             {/* Phone Field */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-sm font-medium text-gray-800 mb-2">
                                     Phone Number
                                 </label>
                                 <div className="relative">
-                                    <FiPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                                    <FiPhone className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg" />
                                     <input
                                         type="tel"
                                         name="phone"
                                         value={formData.phone}
                                         onChange={handleChange}
-                                        className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-yellow ${errors.phone ? 'border-red-500' : 'border-gray-300'
-                                            }`}
-                                        placeholder="Enter your phone number"
+                                        className={`w-full pl-12 pr-4 py-4 border ${errors.phone ? 'border-red-400' : 'border-gray-200'} rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-yellow/50 focus:border-brand-yellow transition-all duration-200 bg-gray-50/50 text-base`}
+                                        placeholder="(123) 456-7890"
                                     />
                                 </div>
                                 {errors.phone && (
-                                    <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+                                    <motion.p
+                                        initial={{ opacity: 0, y: -5 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="text-red-500 text-xs mt-2 ml-1"
+                                    >
+                                        {errors.phone}
+                                    </motion.p>
                                 )}
                             </div>
 
                             {/* Password Field */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-sm font-medium text-gray-800 mb-2">
                                     Password
                                 </label>
                                 <div className="relative">
-                                    <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                                    <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg" />
                                     <input
                                         type={showPassword ? 'text' : 'password'}
                                         name="password"
                                         value={formData.password}
                                         onChange={handleChange}
-                                        className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-yellow ${errors.password ? 'border-red-500' : 'border-gray-300'
-                                            }`}
+                                        className={`w-full pl-12 pr-14 py-4 border ${errors.password ? 'border-red-400' : 'border-gray-200'} rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-yellow/50 focus:border-brand-yellow transition-all duration-200 bg-gray-50/50 text-base`}
                                         placeholder="Create a password"
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                                     >
-                                        {showPassword ? <FiEyeOff /> : <FiEye />}
+                                        {showPassword ? <FiEyeOff className="text-lg" /> : <FiEye className="text-lg" />}
                                     </button>
                                 </div>
                                 {errors.password && (
-                                    <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+                                    <motion.p
+                                        initial={{ opacity: 0, y: -5 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="text-red-500 text-xs mt-2 ml-1"
+                                    >
+                                        {errors.password}
+                                    </motion.p>
                                 )}
                                 {/* Password Strength Indicator */}
                                 {formData.password && (
-                                    <div className="mt-2">
-                                        <div className="flex gap-1 mb-1">
+                                    <motion.div
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: 'auto' }}
+                                        className="mt-3"
+                                    >
+                                        <div className="flex gap-1.5 mb-2">
                                             {[1, 2, 3, 4].map((level) => (
                                                 <div
                                                     key={level}
-                                                    className={`h-1 flex-1 rounded ${level <= passwordStrength.strength
+                                                    className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${level <= passwordStrength.strength
                                                             ? passwordStrength.color
                                                             : 'bg-gray-200'
                                                         }`}
                                                 />
                                             ))}
                                         </div>
-                                        <p className="text-xs text-gray-600">
-                                            Password strength: {passwordStrength.label}
+                                        <p className="text-xs text-gray-600 font-medium">
+                                            Password strength: <span className={passwordStrength.strength >= 3 ? 'text-green-600' : 'text-gray-700'}>{passwordStrength.label}</span>
                                         </p>
-                                    </div>
+                                    </motion.div>
                                 )}
                             </div>
 
                             {/* Confirm Password Field */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-sm font-medium text-gray-800 mb-2">
                                     Confirm Password
                                 </label>
                                 <div className="relative">
-                                    <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                                    <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg" />
                                     <input
                                         type={showConfirmPassword ? 'text' : 'password'}
                                         name="confirmPassword"
                                         value={formData.confirmPassword}
                                         onChange={handleChange}
-                                        className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-yellow ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
-                                            }`}
+                                        className={`w-full pl-12 pr-14 py-4 border ${errors.confirmPassword ? 'border-red-400' : 'border-gray-200'} rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-yellow/50 focus:border-brand-yellow transition-all duration-200 bg-gray-50/50 text-base`}
                                         placeholder="Confirm your password"
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                                     >
-                                        {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
+                                        {showConfirmPassword ? <FiEyeOff className="text-lg" /> : <FiEye className="text-lg" />}
                                     </button>
                                 </div>
                                 {errors.confirmPassword && (
-                                    <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>
+                                    <motion.p
+                                        initial={{ opacity: 0, y: -5 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="text-red-500 text-xs mt-2 ml-1"
+                                    >
+                                        {errors.confirmPassword}
+                                    </motion.p>
                                 )}
                             </div>
 
                             {/* Terms & Conditions */}
-                            <div>
-                                <label className="flex items-start">
-                                    <input
-                                        type="checkbox"
-                                        name="agreeToTerms"
-                                        checked={formData.agreeToTerms}
-                                        onChange={handleChange}
-                                        className="mt-1 mr-2 rounded border-gray-300 text-brand-yellow focus:ring-brand-yellow"
-                                    />
-                                    <span className="text-sm text-gray-700">
+                            <div className="pt-2">
+                                <label className="flex items-start cursor-pointer group">
+                                    <div className="relative flex items-center justify-center mt-0.5">
+                                        <input
+                                            type="checkbox"
+                                            name="agreeToTerms"
+                                            checked={formData.agreeToTerms}
+                                            onChange={handleChange}
+                                            className="w-5 h-5 rounded-md border-gray-300 text-brand-yellow focus:ring-brand-yellow/50 cursor-pointer"
+                                        />
+                                        {formData.agreeToTerms && (
+                                            <FiCheck className="absolute text-black text-sm pointer-events-none" />
+                                        )}
+                                    </div>
+                                    <span className="ml-3 text-sm text-gray-600 group-hover:text-gray-800 transition-colors leading-relaxed">
                                         I agree to the{' '}
-                                        <a href="#" className="text-brand-yellow hover:underline">
+                                        <a href="#" className="text-black font-medium hover:underline">
                                             Terms & Conditions
                                         </a>{' '}
                                         and{' '}
-                                        <a href="#" className="text-brand-yellow hover:underline">
+                                        <a href="#" className="text-black font-medium hover:underline">
                                             Privacy Policy
                                         </a>
                                     </span>
                                 </label>
                                 {errors.agreeToTerms && (
-                                    <p className="text-red-500 text-xs mt-1">{errors.agreeToTerms}</p>
+                                    <motion.p
+                                        initial={{ opacity: 0, y: -5 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="text-red-500 text-xs mt-2 ml-1"
+                                    >
+                                        {errors.agreeToTerms}
+                                    </motion.p>
                                 )}
                             </div>
 
@@ -340,23 +389,41 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                                className="w-full btn-primary py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full btn-primary py-4 text-base font-semibold mt-6 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                             >
-                                {isLoading ? 'Creating Account...' : 'Create Account'}
+                                {isLoading ? (
+                                    <span className="flex items-center justify-center gap-2">
+                                        <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                        </svg>
+                                        Creating Account...
+                                    </span>
+                                ) : 'Create Account'}
                             </button>
                         </form>
 
+                        {/* Divider */}
+                        <div className="relative my-8">
+                            <div className="absolute inset-0 flex items-center">
+                                <div className="w-full border-t border-gray-200"></div>
+                            </div>
+                            <div className="relative flex justify-center text-sm">
+                                <span className="px-4 bg-white text-gray-500">Already a member?</span>
+                            </div>
+                        </div>
+
                         {/* Sign In Link */}
-                        <div className="mt-6 text-center">
-                            <p className="text-gray-600">
-                                Already have an account?{' '}
-                                <button
-                                    onClick={onSwitchToLogin}
-                                    className="text-brand-yellow hover:text-brand-yellow/80 font-medium transition-colors"
-                                >
-                                    Sign In
-                                </button>
-                            </p>
+                        <div className="text-center">
+                            <button
+                                onClick={onSwitchToLogin}
+                                className="text-base font-semibold text-black hover:text-gray-700 transition-colors inline-flex items-center gap-2 group"
+                            >
+                                Sign in to your account
+                                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </motion.div>

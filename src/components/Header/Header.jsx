@@ -15,10 +15,20 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
 
     useEffect(() => {
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50);
+            setIsScrolled(window.scrollY > 20);
         };
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    // Close dropdowns when clicking outside
+    useEffect(() => {
+        const handleClickOutside = () => {
+            setActiveDropdown(null);
+            setShowUserMenu(false);
+        };
+        document.addEventListener('click', handleClickOutside);
+        return () => document.removeEventListener('click', handleClickOutside);
     }, []);
 
     const navigation = [
@@ -64,221 +74,273 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
     ];
 
     return (
-        <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'glass shadow-lg' : 'bg-white'
+        <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/98 backdrop-blur-xl shadow-sm' : 'bg-white'
             }`}>
-            {/* Top Bar - Country Selector & Track Order (Hidden on mobile) */}
-            <div className="hidden md:block bg-black text-white py-2 text-xs">
-                <div className="container-custom flex justify-between items-center">
-                    <div className="flex items-center space-x-4">
-                        <button className="flex items-center hover:text-brand-yellow transition-colors">
-                            <FiMapPin className="mr-1" />
-                            India
-                        </button>
-                        <Link to="#" className="hover:text-brand-yellow transition-colors">Track Order</Link>
-                    </div>
-                    <div className="flex items-center space-x-4">
-                        {isAuthenticated ? (
-                            <div className="relative">
-                                <button
-                                    onClick={() => setShowUserMenu(!showUserMenu)}
-                                    className="flex items-center hover:text-brand-yellow transition-colors"
-                                >
-                                    <FiUser className="mr-1" />
-                                    {user.name}
-                                    <FiChevronDown className="ml-1" />
-                                </button>
-                                {showUserMenu && (
-                                    <div className="absolute right-0 top-full mt-2 w-48 bg-white text-black rounded-lg shadow-xl overflow-hidden z-50">
-                                        <Link
-                                            to="#"
-                                            className="block px-4 py-2 hover:bg-gray-100 flex items-center"
-                                        >
-                                            <FiUser className="mr-2" />
-                                            My Profile
-                                        </Link>
-                                        <Link
-                                            to="#"
-                                            className="block px-4 py-2 hover:bg-gray-100 flex items-center"
-                                        >
-                                            <FiPackage className="mr-2" />
-                                            My Orders
-                                        </Link>
-                                        <Link
-                                            to="#"
-                                            className="block px-4 py-2 hover:bg-gray-100 flex items-center"
-                                        >
-                                            <FiSettings className="mr-2" />
-                                            Settings
-                                        </Link>
-                                        <button
-                                            onClick={() => {
-                                                logout();
-                                                setShowUserMenu(false);
-                                            }}
-                                            className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center text-red-600"
-                                        >
-                                            <FiLogOut className="mr-2" />
-                                            Logout
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        ) : (
-                            <button
-                                onClick={onLoginClick}
-                                className="hover:text-brand-yellow transition-colors"
-                            >
-                                Community Join (Sign In)
+            {/* Top Utility Bar - House of Chikankari Style */}
+            <div className="hidden lg:block border-b border-gray-100">
+                <div className="container-custom">
+                    <div className="flex justify-between items-center h-10 text-xs">
+                        {/* Left Side - Track Order & Country */}
+                        <div className="flex items-center gap-4">
+                            <Link to="#" className="flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors font-medium">
+                                <FiMapPin className="text-sm" />
+                                TRACK ORDER
+                            </Link>
+                            <button className="flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors font-medium">
+                                <span className="text-base">🇮🇳</span>
+                                India
                             </button>
-                        )}
+                        </div>
+
+                        {/* Right Side - User Account */}
+                        <div className="flex items-center gap-4">
+                            {isAuthenticated ? (
+                                <div className="relative">
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setShowUserMenu(!showUserMenu);
+                                        }}
+                                        className="flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors font-medium"
+                                    >
+                                        <FiUser className="text-sm" />
+                                        {user.name}
+                                        <FiChevronDown className={`text-xs transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
+                                    </button>
+                                    <AnimatePresence>
+                                        {showUserMenu && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: -10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -10 }}
+                                                transition={{ duration: 0.2 }}
+                                                className="absolute right-0 top-full mt-2 w-52 bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100"
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                <div className="p-3 bg-gradient-to-br from-brand-yellow/10 to-brand-yellow-light/20 border-b border-gray-100">
+                                                    <p className="font-semibold text-sm">{user.name}</p>
+                                                    <p className="text-xs text-gray-600">{user.email}</p>
+                                                </div>
+                                                <Link
+                                                    to="#"
+                                                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors"
+                                                    onClick={() => setShowUserMenu(false)}
+                                                >
+                                                    <FiUser className="text-gray-600" />
+                                                    <span className="text-sm font-medium">My Profile</span>
+                                                </Link>
+                                                <Link
+                                                    to="#"
+                                                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors"
+                                                    onClick={() => setShowUserMenu(false)}
+                                                >
+                                                    <FiPackage className="text-gray-600" />
+                                                    <span className="text-sm font-medium">My Orders</span>
+                                                </Link>
+                                                <Link
+                                                    to="#"
+                                                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors"
+                                                    onClick={() => setShowUserMenu(false)}
+                                                >
+                                                    <FiSettings className="text-gray-600" />
+                                                    <span className="text-sm font-medium">Settings</span>
+                                                </Link>
+                                                <div className="border-t border-gray-100">
+                                                    <button
+                                                        onClick={() => {
+                                                            logout();
+                                                            setShowUserMenu(false);
+                                                        }}
+                                                        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition-colors text-red-600"
+                                                    >
+                                                        <FiLogOut />
+                                                        <span className="text-sm font-medium">Logout</span>
+                                                    </button>
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={onLoginClick}
+                                    className="text-gray-700 hover:text-black transition-colors font-medium"
+                                >
+                                    Community Join (Sign In)
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {/* Main Navigation */}
-            <nav className="h-16 md:h-20 border-b border-gray-200 bg-white flex items-center relative z-50">
-                <div className="container-custom w-full">
-                    <div className="flex items-center justify-between h-full">
-                        {/* Left Side: Mobile Menu & Logo */}
-                        <div className="flex items-center gap-2 lg:gap-0">
-                            {/* Mobile Menu Button */}
-                            <button
-                                className="lg:hidden text-2xl p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors"
-                                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                                aria-label="Toggle menu"
-                            >
-                                {isMobileMenuOpen ? <FiX /> : <FiMenu />}
-                            </button>
+            {/* Main Header - Logo Centered */}
+            <div className="border-b border-gray-100">
+                <div className="container-custom">
+                    <div className="flex items-center justify-between h-16 lg:h-20">
+                        {/* Left: Mobile Menu Button (Mobile Only) */}
+                        <button
+                            className="lg:hidden w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors"
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            aria-label="Toggle menu"
+                        >
+                            {isMobileMenuOpen ? <FiX className="text-xl" /> : <FiMenu className="text-xl" />}
+                        </button>
 
-                            {/* Logo */}
-                            <Link to="/" className="text-lg md:text-2xl font-bold flex items-center whitespace-nowrap">
-                                <span className="text-black">BREW-N-FILL</span>
-                                <span className="text-xs align-super ml-1">®</span>
-                            </Link>
-                        </div>
+                        {/* Center: Logo - Always Centered */}
+                        <Link to="/" className="absolute left-1/2 transform -translate-x-1/2 lg:static lg:transform-none flex items-center group">
+                            <span className="text-xl lg:text-2xl font-semibold tracking-tight text-black group-hover:text-gray-700 transition-colors">
+                                BREW-N-FILL
+                            </span>
+                            <span className="text-[10px] align-super ml-0.5 text-gray-500">®</span>
+                        </Link>
 
-                        {/* Desktop Navigation - Centered */}
-                        <div className="hidden lg:flex items-center space-x-1 flex-1 justify-center px-4">
-                            {/* This pushes navigation below logo on smaller screens */}
-                        </div>
-
-                        {/* User Actions */}
-                        <div className="flex items-center gap-1 md:gap-4">
+                        {/* Right: User Actions */}
+                        <div className="flex items-center gap-1">
                             <button
                                 onClick={openSearch}
-                                className="p-2 hover:bg-gray-100 rounded-full transition-colors hover:text-brand-yellow"
+                                className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors group"
                                 aria-label="Search"
                             >
-                                <FiSearch className="text-xl" />
+                                <FiSearch className="text-lg text-gray-700 group-hover:text-black group-hover:scale-110 transition-transform" />
                             </button>
                             <button
                                 onClick={onWishlistClick}
-                                className="hidden md:block p-2 hover:bg-gray-100 rounded-full transition-colors hover:text-brand-yellow relative"
+                                className="hidden md:flex w-10 h-10 items-center justify-center hover:bg-gray-100 rounded-full transition-colors relative group"
                                 aria-label="Wishlist"
                             >
-                                <FiHeart className="text-xl" />
+                                <FiHeart className="text-lg text-gray-700 group-hover:text-black group-hover:scale-110 transition-transform" />
                                 {wishlist.length > 0 && (
-                                    <span className="absolute top-0 right-0 bg-brand-yellow text-black text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold">
+                                    <span className="absolute top-1 right-1 bg-brand-yellow text-black text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold">
                                         {wishlist.length}
                                     </span>
                                 )}
                             </button>
                             <button
                                 onClick={onCartClick}
-                                className="p-2 hover:bg-gray-100 rounded-full transition-colors hover:text-brand-yellow relative"
+                                className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors relative group"
                                 aria-label="Shopping cart"
                             >
-                                <FiShoppingCart className="text-xl" />
-                                <span className="absolute top-0 right-0 bg-brand-yellow text-black text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold">
-                                    {getCartCount()}
-                                </span>
+                                <FiShoppingCart className="text-lg text-gray-700 group-hover:text-black group-hover:scale-110 transition-transform" />
+                                {getCartCount() > 0 && (
+                                    <span className="absolute top-1 right-1 bg-brand-yellow text-black text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold">
+                                        {getCartCount()}
+                                    </span>
+                                )}
                             </button>
-
-                            {/* Mobile User Icon - HIDDEN to save space, accessible via menu */}
-                            {/* <button className="md:hidden ..."> ... </button> */}
-
-                            {/* Desktop User Icon */}
                             <button
-                                onClick={isAuthenticated ? () => setShowUserMenu(!showUserMenu) : onLoginClick}
-                                className="hidden md:block p-2 hover:bg-gray-100 rounded-full transition-colors hover:text-brand-yellow relative"
+                                onClick={isAuthenticated ? (e) => { e.stopPropagation(); setShowUserMenu(!showUserMenu); } : onLoginClick}
+                                className="hidden lg:flex w-10 h-10 items-center justify-center hover:bg-gray-100 rounded-full transition-colors relative group"
                                 aria-label="User account"
                             >
-                                <FiUser className="text-xl" />
+                                <FiUser className="text-lg text-gray-700 group-hover:text-black group-hover:scale-110 transition-transform" />
                                 {isAuthenticated && (
-                                    <span className="absolute top-1 right-1 w-2 h-2 bg-green-500 rounded-full"></span>
+                                    <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-green-500 rounded-full ring-2 ring-white"></span>
                                 )}
                             </button>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    {/* Desktop Navigation Menu */}
-                    <div className="hidden lg:flex items-center justify-center mt-4 space-x-6">
-                        {navigation.map((item, index) => (
-                            <div
-                                key={index}
-                                className="relative group"
-                                onMouseEnter={() => item.submenu && setActiveDropdown(index)}
-                                onMouseLeave={() => setActiveDropdown(null)}
-                            >
-                                <Link
-                                    to={item.href || '#'}
-                                    className="text-sm font-medium hover:text-brand-yellow transition-colors flex items-center py-2"
+            {/* Navigation Menu - Below Logo */}
+            <div className="hidden lg:block border-b border-gray-100 bg-white">
+                <div className="container-custom">
+                    <div className="flex items-center justify-center">
+                        <div className="flex items-center gap-1">
+                            {navigation.map((item, index) => (
+                                <div
+                                    key={index}
+                                    className="relative"
+                                    onMouseEnter={() => item.submenu && setActiveDropdown(index)}
+                                    onMouseLeave={() => setActiveDropdown(null)}
+                                    onClick={(e) => e.stopPropagation()}
                                 >
-                                    {item.name}
-                                    {item.submenu && <FiChevronDown className="ml-1" />}
-                                </Link>
-
-                                {/* Dropdown Menu */}
-                                {item.submenu && (
-                                    <AnimatePresence>
-                                        {activeDropdown === index && (
-                                            <motion.div
-                                                initial={{ opacity: 0, y: -10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, y: -10 }}
-                                                transition={{ duration: 0.2 }}
-                                                className="absolute top-full left-0 mt-2 w-56 glass-dark rounded-lg shadow-xl overflow-hidden"
-                                            >
-                                                {item.submenu.map((subItem, subIndex) => (
-                                                    <Link
-                                                        key={subIndex}
-                                                        to={subItem.href}
-                                                        className="block px-4 py-3 text-sm text-white hover:bg-brand-yellow hover:text-black transition-colors"
-                                                    >
-                                                        {subItem.name}
-                                                    </Link>
-                                                ))}
-                                            </motion.div>
+                                    <Link
+                                        to={item.href || '#'}
+                                        className="flex items-center gap-1 px-3 py-3.5 text-xs font-medium text-gray-700 hover:text-black transition-colors rounded-lg hover:bg-gray-50"
+                                    >
+                                        {item.name}
+                                        {item.submenu && (
+                                            <FiChevronDown className={`text-[10px] transition-transform ${activeDropdown === index ? 'rotate-180' : ''}`} />
                                         )}
-                                    </AnimatePresence>
-                                )}
-                            </div>
-                        ))}
+                                    </Link>
+
+                                    {/* Dropdown Menu */}
+                                    {item.submenu && (
+                                        <AnimatePresence>
+                                            {activeDropdown === index && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: -10 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    exit={{ opacity: 0, y: -10 }}
+                                                    transition={{ duration: 0.2 }}
+                                                    className="absolute top-full left-0 mt-0 w-64 bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100"
+                                                >
+                                                    {item.submenu.map((subItem, subIndex) => (
+                                                        <Link
+                                                            key={subIndex}
+                                                            to={subItem.href}
+                                                            className="block px-5 py-3.5 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-brand-yellow/10 hover:to-brand-yellow-light/20 hover:text-black transition-all border-b border-gray-50 last:border-0"
+                                                        >
+                                                            {subItem.name}
+                                                        </Link>
+                                                    ))}
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
-            </nav>
+            </div>
 
-            {/* Mobile Menu - Full Screen Overlay */}
+            {/* Mobile Menu - Premium Slide-in */}
             <AnimatePresence>
                 {isMobileMenuOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, x: '-100%' }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: '-100%' }}
-                        transition={{ type: 'tween', duration: 0.3 }}
-                        className="fixed top-16 bottom-0 left-0 right-0 bg-white z-40 lg:hidden overflow-y-auto pb-10 border-t border-gray-100"
-                    >
-                        <div className="container-custom space-y-1 py-4">
-                            {/* Mobile User Profile Section */}
-                            <div className="mb-6 p-4 bg-gray-50 rounded-xl">
+                    <>
+                        {/* Backdrop */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                        />
+
+                        {/* Menu Panel */}
+                        <motion.div
+                            initial={{ x: '-100%' }}
+                            animate={{ x: 0 }}
+                            exit={{ x: '-100%' }}
+                            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                            className="fixed top-0 bottom-0 left-0 w-[85%] max-w-sm bg-white z-50 lg:hidden overflow-y-auto shadow-2xl"
+                        >
+                            {/* Mobile Header */}
+                            <div className="sticky top-0 bg-white border-b border-gray-100 p-4 flex items-center justify-between z-10">
+                                <Link to="/" className="text-xl font-semibold tracking-tight" onClick={() => setIsMobileMenuOpen(false)}>
+                                    BREW-N-FILL<span className="text-[10px] align-super ml-0.5 text-gray-500">®</span>
+                                </Link>
+                                <button
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className="w-9 h-9 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors"
+                                >
+                                    <FiX className="text-xl" />
+                                </button>
+                            </div>
+
+                            {/* User Profile Section */}
+                            <div className="p-4 border-b border-gray-100">
                                 {isAuthenticated ? (
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-12 h-12 bg-brand-yellow rounded-full flex items-center justify-center text-xl font-bold">
+                                    <div className="flex items-center gap-3 p-3 bg-gradient-to-br from-brand-yellow/10 to-brand-yellow-light/20 rounded-2xl">
+                                        <div className="w-12 h-12 bg-gradient-to-br from-brand-yellow to-brand-yellow-dark rounded-full flex items-center justify-center text-lg font-bold text-black shadow-lg">
                                             {user.name.charAt(0)}
                                         </div>
-                                        <div>
-                                            <p className="font-bold text-lg">{user.name}</p>
-                                            <p className="text-sm text-gray-500">{user.email}</p>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="font-semibold text-base truncate">{user.name}</p>
+                                            <p className="text-xs text-gray-600 truncate">{user.email}</p>
                                         </div>
                                     </div>
                                 ) : (
@@ -287,85 +349,94 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
                                             setIsMobileMenuOpen(false);
                                             onLoginClick();
                                         }}
-                                        className="w-full btn-primary py-3"
+                                        className="w-full btn-primary py-3.5 text-sm font-semibold"
                                     >
                                         Login / Sign Up
                                     </button>
                                 )}
                             </div>
 
-                            {navigation.map((item, index) => (
-                                <div key={index} className="border-b border-gray-100 last:border-0">
-                                    <div className="flex items-center justify-between py-3 px-2 hover:bg-gray-50 rounded-lg transition-colors">
-                                        <Link
-                                            to={item.href || '#'}
-                                            className="text-base font-semibold text-gray-800 flex-1"
-                                            onClick={() => setIsMobileMenuOpen(false)}
-                                        >
-                                            {item.name}
-                                        </Link>
-                                        {item.submenu && (
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    setActiveDropdown(activeDropdown === index ? null : index);
-                                                }}
-                                                className="p-2 -mr-2 text-gray-500 hover:text-black"
-                                                aria-label="Toggle submenu"
+                            {/* Navigation Items */}
+                            <div className="p-4 space-y-1">
+                                {navigation.map((item, index) => (
+                                    <div key={index}>
+                                        <div className="flex items-center justify-between">
+                                            <Link
+                                                to={item.href || '#'}
+                                                className="flex-1 py-3 px-3 text-sm font-semibold text-gray-800 hover:text-black hover:bg-gray-50 rounded-xl transition-colors"
+                                                onClick={() => !item.submenu && setIsMobileMenuOpen(false)}
                                             >
-                                                <FiChevronDown
-                                                    className={`transition-transform duration-300 ${activeDropdown === index ? 'rotate-180' : ''}`}
-                                                />
-                                            </button>
-                                        )}
-                                    </div>
+                                                {item.name}
+                                            </Link>
+                                            {item.submenu && (
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setActiveDropdown(activeDropdown === index ? null : index);
+                                                    }}
+                                                    className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-colors"
+                                                >
+                                                    <FiChevronDown className={`transition-transform ${activeDropdown === index ? 'rotate-180' : ''}`} />
+                                                </button>
+                                            )}
+                                        </div>
 
-                                    {/* Mobile Submenu */}
-                                    <AnimatePresence>
-                                        {item.submenu && activeDropdown === index && (
-                                            <motion.div
-                                                initial={{ height: 0, opacity: 0 }}
-                                                animate={{ height: 'auto', opacity: 1 }}
-                                                exit={{ height: 0, opacity: 0 }}
-                                                className="overflow-hidden bg-gray-50 rounded-lg mb-2"
-                                            >
-                                                {item.submenu.map((subItem, subIndex) => (
-                                                    <Link
-                                                        key={subIndex}
-                                                        to={subItem.href}
-                                                        className="block py-3 px-6 text-sm text-gray-600 hover:text-brand-yellow hover:bg-gray-100 transition-colors border-l-2 border-transparent hover:border-brand-yellow"
-                                                        onClick={() => setIsMobileMenuOpen(false)}
-                                                    >
-                                                        {subItem.name}
-                                                    </Link>
-                                                ))}
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                </div>
-                            ))}
+                                        {/* Mobile Submenu */}
+                                        <AnimatePresence>
+                                            {item.submenu && activeDropdown === index && (
+                                                <motion.div
+                                                    initial={{ height: 0, opacity: 0 }}
+                                                    animate={{ height: 'auto', opacity: 1 }}
+                                                    exit={{ height: 0, opacity: 0 }}
+                                                    className="overflow-hidden"
+                                                >
+                                                    <div className="pl-4 pr-2 py-2 space-y-1">
+                                                        {item.submenu.map((subItem, subIndex) => (
+                                                            <Link
+                                                                key={subIndex}
+                                                                to={subItem.href}
+                                                                className="block py-2.5 px-4 text-sm text-gray-600 hover:text-black hover:bg-gradient-to-r hover:from-brand-yellow/10 hover:to-brand-yellow-light/20 rounded-lg transition-all border-l-2 border-transparent hover:border-brand-yellow"
+                                                                onClick={() => setIsMobileMenuOpen(false)}
+                                                            >
+                                                                {subItem.name}
+                                                            </Link>
+                                                        ))}
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
+                                ))}
+                            </div>
 
                             {/* Mobile Footer Links */}
-                            <div className="mt-8 pt-6 border-t border-gray-100 grid grid-cols-2 gap-4">
-                                <Link to="#" className="text-sm text-gray-500 hover:text-brand-yellow">Track Order</Link>
-                                <Link to="#" className="text-sm text-gray-500 hover:text-brand-yellow">Store Locator</Link>
-                                <Link to="#" className="text-sm text-gray-500 hover:text-brand-yellow">Help Center</Link>
-                                <Link to="#" className="text-sm text-gray-500 hover:text-brand-yellow">Returns</Link>
+                            <div className="p-4 border-t border-gray-100 space-y-2">
+                                <Link to="#" className="flex items-center gap-2 py-2 px-3 text-sm text-gray-600 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                                    <FiMapPin className="text-base" />
+                                    Track Order
+                                </Link>
+                                <button className="flex items-center gap-2 py-2 px-3 text-sm text-gray-600 hover:text-black hover:bg-gray-50 rounded-lg transition-colors w-full text-left">
+                                    <span className="text-base">🇮🇳</span>
+                                    India
+                                </button>
                             </div>
 
                             {isAuthenticated && (
-                                <button
-                                    onClick={() => {
-                                        logout();
-                                        setIsMobileMenuOpen(false);
-                                    }}
-                                    className="w-full mt-6 py-3 text-red-500 font-semibold border border-red-100 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
-                                >
-                                    Logout
-                                </button>
+                                <div className="p-4 border-t border-gray-100">
+                                    <button
+                                        onClick={() => {
+                                            logout();
+                                            setIsMobileMenuOpen(false);
+                                        }}
+                                        className="w-full py-3 text-sm font-semibold text-red-600 border-2 border-red-100 bg-red-50 rounded-xl hover:bg-red-100 transition-colors flex items-center justify-center gap-2"
+                                    >
+                                        <FiLogOut />
+                                        Logout
+                                    </button>
+                                </div>
                             )}
-                        </div>
-                    </motion.div>
+                        </motion.div>
+                    </>
                 )}
             </AnimatePresence>
         </header>
