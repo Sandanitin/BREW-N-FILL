@@ -10,8 +10,25 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState(null);
     const [showUserMenu, setShowUserMenu] = useState(false);
+    const [currentOfferIndex, setCurrentOfferIndex] = useState(0);
     const { getCartCount, wishlist, openSearch } = useShop();
     const { user, isAuthenticated, logout } = useAuth();
+
+    // Promotional offers
+    const offers = [
+        { text: "Members: Free Shipping on Orders ₹500+", link: "#" },
+        { text: "New Year Sale: Up to 40% Off on Selected Items", link: "#" },
+        { text: "Buy 2 Get 1 Free on All Coffee Blends", link: "#" },
+        { text: "Subscribe & Save 15% on Every Order", link: "#" },
+    ];
+
+    // Auto-scroll offers
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentOfferIndex((prev) => (prev + 1) % offers.length);
+        }, 4000); // Change every 4 seconds
+        return () => clearInterval(interval);
+    }, [offers.length]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -76,6 +93,65 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
     return (
         <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/98 backdrop-blur-xl shadow-sm' : 'bg-white'
             }`}>
+            {/* Promotional Banner - Auto-scrolling Offers */}
+            <div className="bg-gray-100 border-b border-gray-200 relative overflow-hidden">
+                <div className="container-custom">
+                    <div className="flex items-center justify-between h-10 relative">
+                        {/* Previous Button */}
+                        <button
+                            onClick={() => setCurrentOfferIndex((prev) => (prev - 1 + offers.length) % offers.length)}
+                            className="absolute left-2 z-10 w-6 h-6 flex items-center justify-center hover:bg-gray-200 rounded-full transition-colors"
+                            aria-label="Previous offer"
+                        >
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+
+                        {/* Offers Container */}
+                        <div className="flex-1 flex items-center justify-center overflow-hidden">
+                            <AnimatePresence mode="wait">
+                                <motion.a
+                                    key={currentOfferIndex}
+                                    href={offers[currentOfferIndex].link}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -20 }}
+                                    transition={{ duration: 0.5 }}
+                                    className="text-xs md:text-sm font-medium text-gray-800 hover:text-black transition-colors text-center px-8"
+                                >
+                                    {offers[currentOfferIndex].text}
+                                </motion.a>
+                            </AnimatePresence>
+                        </div>
+
+                        {/* Next Button */}
+                        <button
+                            onClick={() => setCurrentOfferIndex((prev) => (prev + 1) % offers.length)}
+                            className="absolute right-2 z-10 w-6 h-6 flex items-center justify-center hover:bg-gray-200 rounded-full transition-colors"
+                            aria-label="Next offer"
+                        >
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                {/* Progress Indicators */}
+                <div className="absolute bottom-0 left-0 right-0 flex justify-center gap-1 pb-1">
+                    {offers.map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => setCurrentOfferIndex(index)}
+                            className={`h-0.5 transition-all ${index === currentOfferIndex ? 'w-4 bg-gray-800' : 'w-2 bg-gray-400'
+                                }`}
+                            aria-label={`Go to offer ${index + 1}`}
+                        />
+                    ))}
+                </div>
+            </div>
+
             {/* Top Utility Bar - House of Chikankari Style */}
             <div className="hidden lg:block border-b border-gray-100">
                 <div className="container-custom">
@@ -189,10 +265,7 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
 
                         {/* Center: Logo - Always Centered */}
                         <Link to="/" className="absolute left-1/2 transform -translate-x-1/2 lg:static lg:transform-none flex items-center group">
-                            <span className="text-xl lg:text-2xl font-semibold tracking-tight text-black group-hover:text-gray-700 transition-colors">
-                                BREW-N-FILL
-                            </span>
-                            <span className="text-[10px] align-super ml-0.5 text-gray-500">®</span>
+                            <img src="/images/image.png" alt="BREW-N-FILL" className="h-12 lg:h-16 w-auto object-contain transition-transform group-hover:scale-105" />
                         </Link>
 
                         {/* Right: User Actions */}
@@ -320,8 +393,8 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
                         >
                             {/* Mobile Header */}
                             <div className="sticky top-0 bg-white border-b border-gray-100 p-4 flex items-center justify-between z-10">
-                                <Link to="/" className="text-xl font-semibold tracking-tight" onClick={() => setIsMobileMenuOpen(false)}>
-                                    BREW-N-FILL<span className="text-[10px] align-super ml-0.5 text-gray-500">®</span>
+                                <Link to="/" className="flex items-center" onClick={() => setIsMobileMenuOpen(false)}>
+                                    <img src="/images/image.png" alt="BREW-N-FILL" className="h-10 w-auto object-contain" />
                                 </Link>
                                 <button
                                     onClick={() => setIsMobileMenuOpen(false)}

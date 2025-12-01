@@ -1,16 +1,29 @@
-import { FaFacebook, FaInstagram, FaTwitter, FaYoutube, FaPinterest } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaTwitter, FaYoutube, FaPinterest, FaApple, FaGooglePlay } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     const footerSections = [
         {
+            title: 'COMPANY',
+            links: [
+                { name: 'About Us', href: '/about-us' },
+                { name: 'Privacy Policy', href: '#' },
+                { name: 'Terms & Conditions', href: '#' },
+                { name: 'Return/Exchange Policy', href: '#' },
+                { name: 'Contact Us', href: '/contact-us' },
+                { name: 'Sitemap', href: '#' },
+                { name: 'Stakeholders', href: '#' },
+            ],
+        },
+        {
             title: 'GET TO KNOW US',
             links: [
-                { name: 'Our Story', href: '#' },
+                { name: 'Our Story', href: '/about-us' },
                 { name: 'Terms Of Service', href: '#' },
                 { name: 'Privacy Policy', href: '#' },
                 { name: 'Blogs', href: '#' },
                 { name: 'FAQs', href: '#' },
-                { name: 'Contact Us', href: '#' },
+                { name: 'Contact Us', href: '/contact-us' },
             ],
         },
         {
@@ -21,7 +34,7 @@ const Footer = () => {
                 { name: 'International Orders', href: '#' },
                 { name: 'Return & Exchange Policy', href: '#' },
                 { name: 'New Arrivals', href: '#' },
-                { name: 'Bestseller', href: '#' },
+                { name: 'Bestseller', href: '/bestsellers' },
             ],
         },
         {
@@ -33,93 +46,118 @@ const Footer = () => {
         },
     ];
 
+    const popularCategories = [
+        'Espresso Beans', 'Cold Brew', 'French Press', 'Pour Over',
+        'Coffee Grinders', 'Milk Frothers', 'Travel Mugs', 'Gift Sets'
+    ];
+
     return (
-        <footer className="bg-black text-white">
-            {/* Newsletter Section - Mobile Optimized */}
-            <div className="border-b border-gray-800">
-                <div className="container-custom py-8 md:py-12">
-                    <div className="max-w-2xl mx-auto text-center px-4">
-                        <h3 className="text-xl md:text-2xl font-bold mb-2 md:mb-3">Stay Caffeinated with Our Newsletter</h3>
-                        <p className="text-sm md:text-base text-gray-400 mb-4 md:mb-6">
-                            Get the latest updates on new releases, brewing guides, and exclusive offers
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                            <input
-                                type="email"
-                                placeholder="Enter your email"
-                                className="flex-1 px-4 py-3 rounded-full bg-white/10 border border-gray-700 focus:border-brand-yellow focus:outline-none focus:ring-2 focus:ring-brand-yellow/50 transition-all text-sm md:text-base"
-                            />
-                            <button className="btn-primary whitespace-nowrap py-3 px-6 text-sm md:text-base">
-                                Subscribe
-                            </button>
-                        </div>
+        <footer className="bg-[#F5F3EF] text-gray-800">
+            {/* Popular Categories Section */}
+            <div className="border-b border-gray-300">
+                <div className="container-custom py-8 md:py-10">
+                    <h3 className="text-sm font-bold mb-4 uppercase tracking-wider">Popular Categories</h3>
+                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
+                        {popularCategories.map((category, index) => (
+                            <Link
+                                key={index}
+                                to="#"
+                                className="text-xs text-gray-600 hover:text-black transition-colors py-1"
+                            >
+                                {category}
+                            </Link>
+                        ))}
                     </div>
                 </div>
             </div>
 
-            {/* Main Footer Links - Mobile Stacked */}
-            <div className="container-custom py-8 md:py-12">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-8">
-                    {/* Company Info */}
-                    <div className="text-center md:text-left">
-                        <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">
-                            BREW-N-FILL<span className="text-xs align-super">®</span>
-                        </h3>
-                        <p className="text-sm md:text-base text-gray-400 mb-6">
-                            Premium coffee roasted with passion, delivered to your doorstep
+            {/* Main Footer Content */}
+            <div className="container-custom py-10 md:py-14">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 md:gap-10">
+                    {/* Brand Section */}
+                    <div className="lg:col-span-1">
+                        <img
+                            src="/images/image.png"
+                            alt="BREW-N-FILL"
+                            className="h-12 w-auto object-contain mb-4"
+                        />
+                        <p className="text-sm text-gray-600 mb-6 leading-relaxed">
+                            Premium coffee roasted with passion, delivered to your doorstep. Experience the finest blends from around the world.
                         </p>
-                        <div className="flex gap-4 justify-center md:justify-start">
+
+                        {/* Social Media */}
+                        <div className="flex gap-3 mb-6">
                             <a
                                 href="#"
-                                className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-brand-yellow hover:text-black transition-all"
+                                className="w-9 h-9 bg-gray-800 text-white rounded-full flex items-center justify-center hover:bg-brand-yellow hover:text-black transition-all"
                                 aria-label="Facebook"
                             >
-                                <FaFacebook />
+                                <FaFacebook size={16} />
                             </a>
                             <a
                                 href="#"
-                                className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-brand-yellow hover:text-black transition-all"
+                                className="w-9 h-9 bg-gray-800 text-white rounded-full flex items-center justify-center hover:bg-brand-yellow hover:text-black transition-all"
                                 aria-label="Instagram"
                             >
-                                <FaInstagram />
+                                <FaInstagram size={16} />
                             </a>
                             <a
                                 href="#"
-                                className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-brand-yellow hover:text-black transition-all"
-                                aria-label="Twitter"
-                            >
-                                <FaTwitter />
-                            </a>
-                            <a
-                                href="#"
-                                className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-brand-yellow hover:text-black transition-all"
+                                className="w-9 h-9 bg-gray-800 text-white rounded-full flex items-center justify-center hover:bg-brand-yellow hover:text-black transition-all"
                                 aria-label="YouTube"
                             >
-                                <FaYoutube />
+                                <FaYoutube size={16} />
                             </a>
                             <a
                                 href="#"
-                                className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-brand-yellow hover:text-black transition-all"
-                                aria-label="Pinterest"
+                                className="w-9 h-9 bg-gray-800 text-white rounded-full flex items-center justify-center hover:bg-brand-yellow hover:text-black transition-all"
+                                aria-label="Twitter"
                             >
-                                <FaPinterest />
+                                <FaTwitter size={16} />
+                            </a>
+                        </div>
+
+                        {/* Download App */}
+                        <div className="space-y-2">
+                            <h4 className="text-xs font-bold uppercase tracking-wider mb-3">Download App</h4>
+                            <a
+                                href="#"
+                                className="flex items-center gap-2 bg-black text-white px-3 py-2 rounded-lg hover:bg-gray-800 transition-colors mb-2"
+                            >
+                                <FaApple size={20} />
+                                <div className="text-left">
+                                    <div className="text-[9px] leading-tight">Download on the</div>
+                                    <div className="text-xs font-semibold">App Store</div>
+                                </div>
+                            </a>
+                            <a
+                                href="#"
+                                className="flex items-center gap-2 bg-black text-white px-3 py-2 rounded-lg hover:bg-gray-800 transition-colors"
+                            >
+                                <FaGooglePlay size={18} />
+                                <div className="text-left">
+                                    <div className="text-[9px] leading-tight">GET IT ON</div>
+                                    <div className="text-xs font-semibold">Google Play</div>
+                                </div>
                             </a>
                         </div>
                     </div>
 
-                    {/* Footer Sections - Accordion style on mobile could be an option, but stacking is safer for SEO/Accessibility */}
+                    {/* Footer Links Sections */}
                     {footerSections.map((section, index) => (
-                        <div key={index} className="text-center md:text-left">
-                            <h4 className="font-bold mb-3 md:mb-4 text-brand-yellow text-sm md:text-base tracking-wider">{section.title}</h4>
-                            <ul className="space-y-2">
+                        <div key={index}>
+                            <h4 className="font-bold mb-4 text-xs uppercase tracking-wider text-gray-900">
+                                {section.title}
+                            </h4>
+                            <ul className="space-y-2.5">
                                 {section.links.map((link, linkIndex) => (
                                     <li key={linkIndex}>
-                                        <a
-                                            href={link.href}
-                                            className="text-gray-400 hover:text-brand-yellow transition-colors text-sm block py-1"
+                                        <Link
+                                            to={link.href}
+                                            className="text-xs text-gray-600 hover:text-black transition-colors block"
                                         >
                                             {link.name}
-                                        </a>
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>
@@ -128,24 +166,24 @@ const Footer = () => {
                 </div>
             </div>
 
-            {/* Payment Methods & Copyright - Mobile Optimized */}
-            <div className="border-t border-gray-800">
-                <div className="container-custom py-6">
+            {/* Bottom Bar */}
+            <div className="border-t border-gray-300">
+                <div className="container-custom py-5">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
-                        <div className="flex flex-col sm:flex-row items-center gap-3">
-                            <span className="text-xs md:text-sm text-gray-400">We Accept:</span>
-                            <div className="flex gap-2 flex-wrap justify-center">
-                                {['VISA', 'MasterCard', 'UPI', 'PayPal'].map((payment) => (
+                        <div className="flex flex-wrap items-center justify-center gap-3">
+                            <span className="text-xs text-gray-600">We Accept:</span>
+                            <div className="flex gap-2 flex-wrap">
+                                {['VISA', 'MasterCard', 'UPI', 'PayPal', 'Amex'].map((payment) => (
                                     <div
                                         key={payment}
-                                        className="px-2 md:px-3 py-1 bg-white/10 rounded text-[10px] md:text-xs font-semibold"
+                                        className="px-2.5 py-1 bg-white border border-gray-300 rounded text-[10px] font-semibold text-gray-700"
                                     >
                                         {payment}
                                     </div>
                                 ))}
                             </div>
                         </div>
-                        <p className="text-xs md:text-sm text-gray-400">
+                        <p className="text-xs text-gray-600">
                             © 2025 BREW-N-FILL. All rights reserved.
                         </p>
                     </div>
