@@ -11,6 +11,7 @@ import CartModal from './components/Cart/CartModal';
 import SearchModal from './components/Search/SearchModal';
 import LoginModal from './components/Auth/LoginModal';
 import RegisterModal from './components/Auth/RegisterModal';
+import ScrollToTop from './components/ScrollToTop';
 import { AnimatePresence } from 'framer-motion';
 
 // Pages
@@ -40,6 +41,7 @@ function App() {
     <AuthProvider>
       <ShopProvider>
         <div className="min-h-screen flex flex-col">
+          <ScrollToTop />
           {/* Toast Notifications */}
           <Toaster
             position="top-right"
