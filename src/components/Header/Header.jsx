@@ -106,8 +106,7 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
     ];
 
     return (
-        <header ref={headerRef} className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/98 backdrop-blur-xl shadow-sm' : 'bg-white'
-            }`}>
+        <header ref={headerRef} className="fixed top-0 w-full z-50 transition-all duration-300 bg-white">
             {/* Promotional Banner - Auto-scrolling Offers */}
             <div className="bg-gray-100 border-b border-gray-200 relative overflow-hidden">
                 <div className="container-custom">
