@@ -1,41 +1,9 @@
 import { motion } from 'framer-motion';
 import { FiGift, FiHeart, FiPackage } from 'react-icons/fi';
+import ProductCard from '../components/Products/ProductCard';
+import { giftingProducts, giftingOccasions } from '../data/gifting';
 
 const GiftingPage = () => {
-    const giftSets = [
-        {
-            name: 'Coffee Lover\'s Starter Kit',
-            price: 1999,
-            image: 'https://images.unsplash.com/photo-1513885535751-8b9238bd345a?w=800',
-            items: ['3 Premium Blends', 'French Press', 'Travel Mug']
-        },
-        {
-            name: 'Executive Gift Hamper',
-            price: 3999,
-            image: 'https://images.unsplash.com/photo-1549298222-1c31e8e8c3c8?w=800',
-            items: ['5 Single Origins', 'Burr Grinder', 'Ceramic Cups Set']
-        },
-        {
-            name: 'Holiday Special Box',
-            price: 2499,
-            image: 'https://images.unsplash.com/photo-1512568400610-62da28bc8a13?w=800',
-            items: ['4 Festive Blends', 'Coffee Scoop', 'Recipe Book']
-        },
-        {
-            name: 'Corporate Gift Set',
-            price: 4999,
-            image: 'https://images.unsplash.com/photo-1607349913338-fca6f7fc42d0?w=800',
-            items: ['6 Premium Coffees', 'Espresso Machine', 'Branded Merchandise']
-        },
-    ];
-
-    const occasions = [
-        { name: 'Birthday', icon: '🎂', img: 'https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=600' },
-        { name: 'Anniversary', icon: '💑', img: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600' },
-        { name: 'Corporate', icon: '💼', img: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600' },
-        { name: 'Festivals', icon: '🎉', img: 'https://images.unsplash.com/photo-1482523838543-5104d51eb9f5?w=600' },
-    ];
-
     return (
         <div className="min-h-screen bg-gray-50 pt-16 md:pt-0">
             {/* Hero - Responsive Height */}
@@ -62,7 +30,7 @@ const GiftingPage = () => {
             <div className="container-custom py-12 md:py-16">
                 <h2 className="text-3xl md:text-4xl font-bold mb-6 md:mb-8 text-center">Shop by Occasion</h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12 md:mb-16">
-                    {occasions.map((occasion, index) => (
+                    {giftingOccasions.map((occasion, index) => (
                         <motion.div
                             key={occasion.name}
                             initial={{ opacity: 0, scale: 0.9 }}
@@ -86,33 +54,8 @@ const GiftingPage = () => {
                 {/* Gift Sets */}
                 <h2 className="text-3xl md:text-4xl font-bold mb-6 md:mb-8">Curated Gift Sets</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {giftSets.map((gift, index) => (
-                        <motion.div
-                            key={gift.name}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.1 }}
-                            className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow flex flex-col"
-                        >
-                            <div className="relative h-56 md:h-64 shrink-0">
-                                <img src={gift.image} alt={gift.name} className="w-full h-full object-cover" />
-                                <div className="absolute top-3 right-3 bg-brand-yellow text-black px-3 py-1 rounded-full text-xs md:text-sm font-bold">
-                                    Gift Set
-                                </div>
-                            </div>
-                            <div className="p-5 md:p-6 flex flex-col flex-1">
-                                <h3 className="text-lg md:text-xl font-bold mb-2">{gift.name}</h3>
-                                <ul className="text-sm text-gray-600 mb-4 space-y-1 flex-1">
-                                    {gift.items.map((item, i) => (
-                                        <li key={i}>✓ {item}</li>
-                                    ))}
-                                </ul>
-                                <div className="flex items-center justify-between mt-auto">
-                                    <span className="text-xl md:text-2xl font-bold">₹{gift.price}</span>
-                                    <button className="btn-primary px-4 py-2 text-sm">Add to Cart</button>
-                                </div>
-                            </div>
-                        </motion.div>
+                    {giftingProducts.map((gift, index) => (
+                        <ProductCard key={gift.id} product={gift} index={index} />
                     ))}
                 </div>
             </div>

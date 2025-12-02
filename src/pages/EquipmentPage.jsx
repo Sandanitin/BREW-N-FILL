@@ -1,6 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ProductCard from '../components/Products/ProductCard';
+import { equipmentProducts, equipmentCategories } from '../data/equipment';
 
 const EquipmentPage = () => {
+    const [activeCategory, setActiveCategory] = useState('All');
+
+    const filteredProducts = activeCategory === 'All'
+        ? equipmentProducts
+        : equipmentProducts.filter(p => p.category === activeCategory);
+
     return (
         <div className="pt-32 pb-16 container-custom">
             <h1 className="text-4xl font-bold mb-8 text-center">Brewing Equipment</h1>
@@ -8,48 +16,26 @@ const EquipmentPage = () => {
                 Elevate your coffee experience with our professional-grade brewing equipment.
             </p>
 
+            {/* Category Filter */}
+            <div className="flex flex-wrap justify-center gap-4 mb-12">
+                {equipmentCategories.map((category) => (
+                    <button
+                        key={category}
+                        onClick={() => setActiveCategory(category)}
+                        className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${activeCategory === category
+                            ? 'bg-black text-white shadow-lg scale-105'
+                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                            }`}
+                    >
+                        {category}
+                    </button>
+                ))}
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {/* Item 1 */}
-                <div className="group">
-                    <div className="overflow-hidden rounded-xl mb-4 aspect-square">
-                        <img
-                            src="https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=800&q=80"
-                            alt="Espresso Machine"
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        />
-                    </div>
-                    <h3 className="text-xl font-bold mb-1">Pro Espresso Machine</h3>
-                    <p className="text-gray-500 mb-2">Professional Grade</p>
-                    <span className="text-brand-yellow font-bold text-lg">₹45,999</span>
-                </div>
-
-                {/* Item 2 */}
-                <div className="group">
-                    <div className="overflow-hidden rounded-xl mb-4 aspect-square">
-                        <img
-                            src="https://images.unsplash.com/photo-1520970014086-2208d157c9e2?w=800&q=80"
-                            alt="Pour Over Kit"
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        />
-                    </div>
-                    <h3 className="text-xl font-bold mb-1">Pour Over Kit</h3>
-                    <p className="text-gray-500 mb-2">For the Purist</p>
-                    <span className="text-brand-yellow font-bold text-lg">₹2,499</span>
-                </div>
-
-                {/* Item 3 */}
-                <div className="group">
-                    <div className="overflow-hidden rounded-xl mb-4 aspect-square">
-                        <img
-                            src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80"
-                            alt="Coffee Grinder"
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        />
-                    </div>
-                    <h3 className="text-xl font-bold mb-1">Precision Grinder</h3>
-                    <p className="text-gray-500 mb-2">Consistent Grind</p>
-                    <span className="text-brand-yellow font-bold text-lg">₹4,999</span>
-                </div>
+                {filteredProducts.map((product, index) => (
+                    <ProductCard key={product.id} product={product} index={index} />
+                ))}
             </div>
         </div>
     );
