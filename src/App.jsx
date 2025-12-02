@@ -26,6 +26,7 @@ import CelebritiesPage from './pages/CelebritiesPage';
 import AboutUsPage from './pages/AboutUsPage';
 import CareersPage from './pages/CareersPage';
 import ContactUsPage from './pages/ContactUsPage';
+import ProductDetailsPage from './pages/ProductDetailsPage';
 
 
 
@@ -82,6 +83,7 @@ function App() {
               <Route path="/about-us" element={<AboutUsPage />} />
               <Route path="/careers" element={<CareersPage />} />
               <Route path="/contact-us" element={<ContactUsPage />} />
+              <Route path="/product/:id" element={<ProductDetailsPage />} />
             </Routes>
           </main>
 

@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
 import { FiHeart, FiShoppingCart, FiEye } from 'react-icons/fi';
 import { useState } from 'react';
@@ -32,7 +33,7 @@ const ProductCard = ({ product, index }) => {
             className="product-card bg-white rounded-xl overflow-hidden border border-gray-200 group"
         >
             {/* Product Image */}
-            <div className="relative overflow-hidden aspect-square bg-gray-100">
+            <Link to={`/product/${product.id}`} className="block relative overflow-hidden aspect-square bg-gray-100">
                 {product.image ? (
                     <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
                 ) : (
@@ -70,13 +71,15 @@ const ProductCard = ({ product, index }) => {
                         SALE
                     </div>
                 )}
-            </div>
+            </Link>
 
             {/* Product Info */}
             <div className="p-4">
-                <h3 className="font-semibold text-lg mb-1 line-clamp-2 group-hover:text-brand-yellow transition-colors">
-                    {product.name}
-                </h3>
+                <Link to={`/product/${product.id}`}>
+                    <h3 className="font-semibold text-lg mb-1 line-clamp-2 group-hover:text-brand-yellow transition-colors">
+                        {product.name}
+                    </h3>
+                </Link>
 
                 <div className="flex items-center gap-2 mb-2">
                     <div className="flex items-center text-brand-yellow text-sm">
@@ -105,8 +108,8 @@ const ProductCard = ({ product, index }) => {
                                     key={size}
                                     onClick={() => setSelectedSize(size)}
                                     className={`px-3 py-1 text-xs border rounded-lg transition-all ${selectedSize === size
-                                            ? 'border-black bg-black text-white'
-                                            : 'border-gray-300 hover:border-black'
+                                        ? 'border-black bg-black text-white'
+                                        : 'border-gray-300 hover:border-black'
                                         }`}
                                 >
                                     {size}
