@@ -423,19 +423,6 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
                             style={{ top: `${headerHeight}px` }}
                             className="fixed bottom-0 left-0 w-[85%] max-w-sm bg-white z-50 lg:hidden overflow-y-auto shadow-2xl"
                         >
-                            {/* Mobile Header */}
-                            <div className="sticky top-0 bg-white border-b border-gray-100 p-4 flex items-center justify-between z-10">
-                                <Link to="/" className="flex items-center" onClick={() => setIsMobileMenuOpen(false)}>
-                                    <img src="/images/image.png" alt="BREW-N-FILL" className="h-10 w-auto object-contain" />
-                                </Link>
-                                <button
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className="w-9 h-9 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors"
-                                >
-                                    <FiX className="text-xl" />
-                                </button>
-                            </div>
-
                             {/* User Profile Section */}
                             <div className="p-4 border-b border-gray-100">
                                 {isAuthenticated ? (
