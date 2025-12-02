@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { FiSearch, FiHeart, FiShoppingCart, FiUser, FiMenu, FiX, FiChevronDown, FiMapPin, FiPackage, FiSettings, FiLogOut } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -11,8 +11,23 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
     const [activeDropdown, setActiveDropdown] = useState(null);
     const [showUserMenu, setShowUserMenu] = useState(false);
     const [currentOfferIndex, setCurrentOfferIndex] = useState(0);
+    const [headerHeight, setHeaderHeight] = useState(106); // Default height
     const { getCartCount, wishlist, openSearch } = useShop();
     const { user, isAuthenticated, logout } = useAuth();
+    const headerRef = useRef(null);
+
+    // Track header height
+    useEffect(() => {
+        const updateHeaderHeight = () => {
+            if (headerRef.current) {
+                setHeaderHeight(headerRef.current.offsetHeight);
+            }
+        };
+
+        updateHeaderHeight();
+        window.addEventListener('resize', updateHeaderHeight);
+        return () => window.removeEventListener('resize', updateHeaderHeight);
+    }, []);
 
     // Promotional offers
     const offers = [
@@ -91,16 +106,16 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
     ];
 
     return (
-        <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/98 backdrop-blur-xl shadow-sm' : 'bg-white'
+        <header ref={headerRef} className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/98 backdrop-blur-xl shadow-sm' : 'bg-white'
             }`}>
             {/* Promotional Banner - Auto-scrolling Offers */}
             <div className="bg-gray-100 border-b border-gray-200 relative overflow-hidden">
                 <div className="container-custom">
                     <div className="flex items-center justify-between h-10 relative">
-                        {/* Previous Button */}
+                        {/* Previous Button - Hidden on very small screens */}
                         <button
                             onClick={() => setCurrentOfferIndex((prev) => (prev - 1 + offers.length) % offers.length)}
-                            className="absolute left-2 z-10 w-6 h-6 flex items-center justify-center hover:bg-gray-200 rounded-full transition-colors"
+                            className="hidden sm:flex absolute left-2 z-10 w-6 h-6 items-center justify-center hover:bg-gray-200 rounded-full transition-colors"
                             aria-label="Previous offer"
                         >
                             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -109,7 +124,7 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
                         </button>
 
                         {/* Offers Container */}
-                        <div className="flex-1 flex items-center justify-center overflow-hidden">
+                        <div className="flex-1 flex items-center justify-center overflow-hidden px-2 sm:px-8">
                             <AnimatePresence mode="wait">
                                 <motion.a
                                     key={currentOfferIndex}
@@ -118,17 +133,17 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -20 }}
                                     transition={{ duration: 0.5 }}
-                                    className="text-xs md:text-sm font-medium text-gray-800 hover:text-black transition-colors text-center px-8"
+                                    className="text-[10px] sm:text-xs md:text-sm font-medium text-gray-800 hover:text-black transition-colors text-center"
                                 >
                                     {offers[currentOfferIndex].text}
                                 </motion.a>
                             </AnimatePresence>
                         </div>
 
-                        {/* Next Button */}
+                        {/* Next Button - Hidden on very small screens */}
                         <button
                             onClick={() => setCurrentOfferIndex((prev) => (prev + 1) % offers.length)}
-                            className="absolute right-2 z-10 w-6 h-6 flex items-center justify-center hover:bg-gray-200 rounded-full transition-colors"
+                            className="hidden sm:flex absolute right-2 z-10 w-6 h-6 items-center justify-center hover:bg-gray-200 rounded-full transition-colors"
                             aria-label="Next offer"
                         >
                             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -155,9 +170,9 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
             {/* Top Utility Bar - House of Chikankari Style */}
             <div className="hidden lg:block border-b border-gray-100">
                 <div className="container-custom">
-                    <div className="flex justify-between items-center h-10 text-xs">
+                    <div className="flex items-center justify-between h-16 relative">
                         {/* Left Side - Track Order & Country */}
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-4 text-xs">
                             <Link to="#" className="flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors font-medium">
                                 <FiMapPin className="text-sm" />
                                 TRACK ORDER
@@ -168,8 +183,44 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
                             </button>
                         </div>
 
-                        {/* Right Side - User Account */}
-                        <div className="flex items-center gap-4">
+                        {/* Center: Logo */}
+                        <Link to="/" className="absolute left-1/2 transform -translate-x-1/2 flex items-center group">
+                            <img src="/images/image.png" alt="BREW-N-FILL" className="h-14 w-auto object-contain transition-transform group-hover:scale-105" />
+                        </Link>
+
+                        {/* Right Side - User Account & Icons */}
+                        <div className="flex items-center gap-1">
+                            <button
+                                onClick={openSearch}
+                                className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors group"
+                                aria-label="Search"
+                            >
+                                <FiSearch className="text-lg text-gray-700 group-hover:text-black group-hover:scale-110 transition-transform" />
+                            </button>
+                            <button
+                                onClick={onWishlistClick}
+                                className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors relative group"
+                                aria-label="Wishlist"
+                            >
+                                <FiHeart className="text-lg text-gray-700 group-hover:text-black group-hover:scale-110 transition-transform" />
+                                {wishlist.length > 0 && (
+                                    <span className="absolute top-1 right-1 bg-brand-yellow text-black text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold">
+                                        {wishlist.length}
+                                    </span>
+                                )}
+                            </button>
+                            <button
+                                onClick={onCartClick}
+                                className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors relative group"
+                                aria-label="Shopping cart"
+                            >
+                                <FiShoppingCart className="text-lg text-gray-700 group-hover:text-black group-hover:scale-110 transition-transform" />
+                                {getCartCount() > 0 && (
+                                    <span className="absolute top-1 right-1 bg-brand-yellow text-black text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold">
+                                        {getCartCount()}
+                                    </span>
+                                )}
+                            </button>
                             {isAuthenticated ? (
                                 <div className="relative">
                                     <button
@@ -177,11 +228,11 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
                                             e.stopPropagation();
                                             setShowUserMenu(!showUserMenu);
                                         }}
-                                        className="flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors font-medium"
+                                        className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors relative group"
+                                        aria-label="User account"
                                     >
-                                        <FiUser className="text-sm" />
-                                        {user.name}
-                                        <FiChevronDown className={`text-xs transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
+                                        <FiUser className="text-lg text-gray-700 group-hover:text-black group-hover:scale-110 transition-transform" />
+                                        <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-green-500 rounded-full ring-2 ring-white"></span>
                                     </button>
                                     <AnimatePresence>
                                         {showUserMenu && (
@@ -190,7 +241,7 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
                                                 animate={{ opacity: 1, y: 0 }}
                                                 exit={{ opacity: 0, y: -10 }}
                                                 transition={{ duration: 0.2 }}
-                                                className="absolute right-0 top-full mt-2 w-52 bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100"
+                                                className="absolute right-0 top-full mt-2 w-52 bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100 z-50"
                                                 onClick={(e) => e.stopPropagation()}
                                             >
                                                 <div className="p-3 bg-gradient-to-br from-brand-yellow/10 to-brand-yellow-light/20 border-b border-gray-100">
@@ -240,9 +291,10 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
                             ) : (
                                 <button
                                     onClick={onLoginClick}
-                                    className="text-gray-700 hover:text-black transition-colors font-medium"
+                                    className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors group"
+                                    aria-label="User account"
                                 >
-                                    Community Join (Sign In)
+                                    <FiUser className="text-lg text-gray-700 group-hover:text-black group-hover:scale-110 transition-transform" />
                                 </button>
                             )}
                         </div>
@@ -250,22 +302,23 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
                 </div>
             </div>
 
-            {/* Main Header - Logo Centered */}
-            <div className="border-b border-gray-100">
+
+            {/* Mobile Header - Only visible on mobile */}
+            <div className="lg:hidden border-b border-gray-100">
                 <div className="container-custom">
-                    <div className="flex items-center justify-between h-16 lg:h-20">
-                        {/* Left: Mobile Menu Button (Mobile Only) */}
+                    <div className="flex items-center justify-between h-16 relative">
+                        {/* Left: Mobile Menu Button */}
                         <button
-                            className="lg:hidden w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors"
+                            className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors"
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                             aria-label="Toggle menu"
                         >
                             {isMobileMenuOpen ? <FiX className="text-xl" /> : <FiMenu className="text-xl" />}
                         </button>
 
-                        {/* Center: Logo - Always Centered */}
-                        <Link to="/" className="absolute left-1/2 transform -translate-x-1/2 lg:static lg:transform-none flex items-center group">
-                            <img src="/images/image.png" alt="BREW-N-FILL" className="h-12 lg:h-16 w-auto object-contain transition-transform group-hover:scale-105" />
+                        {/* Center: Logo - Absolutely centered */}
+                        <Link to="/" className="absolute left-1/2 transform -translate-x-1/2 flex items-center group">
+                            <img src="/images/image.png" alt="BREW-N-FILL" className="h-12 w-auto object-contain transition-transform group-hover:scale-105" />
                         </Link>
 
                         {/* Right: User Actions */}
@@ -278,18 +331,6 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
                                 <FiSearch className="text-lg text-gray-700 group-hover:text-black group-hover:scale-110 transition-transform" />
                             </button>
                             <button
-                                onClick={onWishlistClick}
-                                className="hidden md:flex w-10 h-10 items-center justify-center hover:bg-gray-100 rounded-full transition-colors relative group"
-                                aria-label="Wishlist"
-                            >
-                                <FiHeart className="text-lg text-gray-700 group-hover:text-black group-hover:scale-110 transition-transform" />
-                                {wishlist.length > 0 && (
-                                    <span className="absolute top-1 right-1 bg-brand-yellow text-black text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold">
-                                        {wishlist.length}
-                                    </span>
-                                )}
-                            </button>
-                            <button
                                 onClick={onCartClick}
                                 className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors relative group"
                                 aria-label="Shopping cart"
@@ -299,16 +340,6 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
                                     <span className="absolute top-1 right-1 bg-brand-yellow text-black text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold">
                                         {getCartCount()}
                                     </span>
-                                )}
-                            </button>
-                            <button
-                                onClick={isAuthenticated ? (e) => { e.stopPropagation(); setShowUserMenu(!showUserMenu); } : onLoginClick}
-                                className="hidden lg:flex w-10 h-10 items-center justify-center hover:bg-gray-100 rounded-full transition-colors relative group"
-                                aria-label="User account"
-                            >
-                                <FiUser className="text-lg text-gray-700 group-hover:text-black group-hover:scale-110 transition-transform" />
-                                {isAuthenticated && (
-                                    <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-green-500 rounded-full ring-2 ring-white"></span>
                                 )}
                             </button>
                         </div>
@@ -379,7 +410,8 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden"
+                            style={{ top: `${headerHeight}px` }}
+                            className="fixed left-0 right-0 bottom-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden"
                             onClick={() => setIsMobileMenuOpen(false)}
                         />
 
@@ -389,7 +421,8 @@ const Header = ({ onCartClick, onWishlistClick, onLoginClick }) => {
                             animate={{ x: 0 }}
                             exit={{ x: '-100%' }}
                             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                            className="fixed top-0 bottom-0 left-0 w-[85%] max-w-sm bg-white z-50 lg:hidden overflow-y-auto shadow-2xl"
+                            style={{ top: `${headerHeight}px` }}
+                            className="fixed bottom-0 left-0 w-[85%] max-w-sm bg-white z-50 lg:hidden overflow-y-auto shadow-2xl"
                         >
                             {/* Mobile Header */}
                             <div className="sticky top-0 bg-white border-b border-gray-100 p-4 flex items-center justify-between z-10">
